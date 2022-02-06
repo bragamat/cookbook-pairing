@@ -1,0 +1,25 @@
+version: '3.9'
+services:
+  db_pg:
+    image: postgres
+    restart: always
+    ports:
+      - 5444:5432
+    environment:
+      POSTGRES_PASSWORD: docker
+      POSTGRES_USER: docker
+    volumes:
+      - pg_db:/var/lib/postgresql/pgdata/data/
+      - ./init_db_pg.sql:/docker-entrypoint-initdb.d/init.sql
+  db_mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongo
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    volumes:
+      - mongo_db:/data/db
+volumes:
+  pg_db:
+  mongo_db:

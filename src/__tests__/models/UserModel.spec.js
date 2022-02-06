@@ -2,7 +2,6 @@ import UserModel from '../../models/user.js'
 import InvalidParams from '../../errors/invalidParams.js'
 import EmailValidator from '../../validators/emailValidator.js'
 
-
 describe('User Model', () => {
   describe('creating a user', () => {
 
