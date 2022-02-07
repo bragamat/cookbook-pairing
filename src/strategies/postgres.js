@@ -1,31 +1,39 @@
 import knex from 'knex'
+import { knexConfig } from '../db/knex.js'
+
+const env = process.env.NODE_ENV || 'development'
 
 export default class PostgresStrategy {
   #instance
   constructor(DB_URL) {
     this.DB_URL = DB_URL
-    this.table = 'users'
   }
 
   async connect(){
-    this.#instance = knex({
-      connection: this.DB_URL,
-      client: 'pg'
-    })
-
-    return await this.#instance.raw('SELECT 1 + 1 as result')
+    try {
+      this.#instance = knex(knexConfig[env])
+      return await this.#instance.raw('SELECT 1 + 1 as result')
+    } catch (err) {
+      throw new Error('Connection Failed!', err)
+    }
   }
 
-  create(item) {
-    debugger
-    return this.#instance
-    .insert(item)
-    .into(this.table)
+  async create({ user, table }) {
+    try {
+      const result = await this.#instance(table).insert(user, 'id')
+      const id = result[0].id
+
+      return { ...user, id }
+    } catch(err) {
+      console.log(err)
+    }
   }
 
-  read(){
-    return this.#instance
-      .select()
-      .from(this.table)
+  async delete({ table }) {
+    const result = await this.#instance(table).delete()
+  }
+
+  async read({ table, query }){
+    return this.#instance(table).select(query)
   }
 }

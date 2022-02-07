@@ -5,6 +5,7 @@
   "license": "MIT",
   "type": "module",
   "dependencies": {
+    "dotenv": "^16.0.0",
     "express": "^4.17.2",
     "knex": "^1.0.2",
     "mongodb": "^4.3.1",
@@ -12,9 +13,13 @@
   },
   "devDependencies": {
     "jest": "^27.4.7",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "supertest": "^6.2.2"
   },
   "scripts": {
+    "db:migrate": "env $(cat .env) knex migrate:latest --knexfile=src/db/knex.js",
+    "db:migration:create": "env $(cat .env) knex migrate:make --knexfile=src/db/knex.js",
+    "start": "nodemon src/server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest"
   }
 }
