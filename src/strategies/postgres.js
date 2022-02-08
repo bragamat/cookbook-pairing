@@ -18,12 +18,15 @@ export default class PostgresStrategy {
     }
   }
 
-  async create({ user, table }) {
+  async create({ user: { name, age, email }, table }) {
     try {
-      const result = await this.#instance(table).insert(user, 'id')
+      const result = await this
+        .#instance(table)
+        .insert({ name, age, email }, 'id')
+
       const id = result[0].id
 
-      return { ...user, id }
+      return { name, age, email, id }
     } catch(err) {
       console.log(err)
     }

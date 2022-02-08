@@ -8,12 +8,15 @@ export default class UserFactory {
   }
 
   async save(){
-    try {
-      const result = await this.repo.save(this.user, postgres)
+    if(this.user.isValid()) {
 
-      return result
-    } catch (err) {
-      throw new Error(err.message)
+      try {
+        return await this.repo.save(this.user, postgres)
+      } catch (err) {
+        throw new Error(err.message)
+      }
     }
+
+    return this.user.errors
   }
 }

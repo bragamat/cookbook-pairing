@@ -8,10 +8,8 @@ UsersController.post('/', async (req, res) => {
   const userFactory = new UserFactory(req.body.user, UserRepo)
 
   try {
-    const user = await userFactory.save()
-    return res.json(user)
+    return res.json(await userFactory.save())
   } catch(err) {
-    return res.status(400).json(userFactory)
+    return res.status(400).json(JSON.parse(err.message))
   }
-
 })

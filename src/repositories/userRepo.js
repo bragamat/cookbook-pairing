@@ -22,8 +22,7 @@ export default class UserRepo {
     try {
       return await repo.create(user)
     } catch (err) {
-      console.log(err)
-      throw new Error('something came up')
+      throw new Error(JSON.stringify(err))
     }
   }
 
@@ -34,8 +33,7 @@ export default class UserRepo {
     try {
       return await repo.delete()
     } catch (err) {
-      console.log(err)
-      throw new Error('something came up')
+      throw new Error(JSON.stringify(err))
     }
   }
 
@@ -46,8 +44,7 @@ export default class UserRepo {
     try {
       return await repo.select()
     } catch (err) {
-      console.log(err)
-      throw new Error('something came up')
+      throw new Error(JSON.stringify(err))
     }
   }
 }
