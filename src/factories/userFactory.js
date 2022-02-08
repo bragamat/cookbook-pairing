@@ -1,8 +1,9 @@
 import UserModel from '../models/user.js'
+import UserRepo from '../repositories/userRepo.js'
 import { postgres } from '../repositories/base.js'
 
 export default class UserFactory {
-  constructor(params, repo){
+  constructor(params, repo = UserRepo){
     this.user = new UserModel({...params})
     this.repo = repo
   }

@@ -13,3 +13,7 @@ UsersController.post('/', async (req, res) => {
     return res.status(400).json(JSON.parse(err.message))
   }
 })
+
+UsersController.delete('/:id',  async (req, res) => {
+  return res.status(202).json({ message: 'user was removed' })
+})
