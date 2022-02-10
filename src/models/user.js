@@ -1,12 +1,13 @@
 import UserValidator from '../validators/userValidator.js'
 
 export default class UserModel {
-  constructor({ name, email, age }, validator = UserValidator) {
+  constructor({ id, name, email, age }, validator = UserValidator) {
     this.name = name
     this.email = email
     this.age = age
     this.validator = new validator()
     this.errors = []
+    this.id = id
   }
 
   #validate(){

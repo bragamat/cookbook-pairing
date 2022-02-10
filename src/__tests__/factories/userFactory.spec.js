@@ -9,7 +9,7 @@ describe('UserFactory', () => {
     await UserRepo.deleteAll(strategy)
   })
 
-  it.only('saves user to database', async () => {
+  it('saves user to database', async () => {
     const user = {
       name: 'Mateus Braga',
       age: 26,

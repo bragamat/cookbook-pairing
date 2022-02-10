@@ -25,18 +25,35 @@ export default class PostgresStrategy {
         .insert({ name, age, email }, 'id')
 
       const id = result[0].id
-
       return { name, age, email, id }
     } catch(err) {
       console.log(err)
     }
   }
 
-  async delete({ table }) {
-    const result = await this.#instance(table).delete()
+  async delete({ table, query }) {
+    if(query){
+      await this.#instance(table).delete().where(query)
+    } else {
+      await this.#instance(table).delete()
+    }
+  }
+
+  async select(table){
+    return await this.#instance(table).select().from(table)
   }
 
   async read({ table, query }){
-    return this.#instance(table).select(query)
+    return await this.#instance(table).select(query)
   }
 }
+
+
+// (async () => {
+//   const pg = new PostgresStrategy()
+//   await pg.connect()
+//   await pg.create({
+//     user: { name: "exanmople", email: "stuff", age: 26 }})
+//
+//   console.log(await pg.select('users'))
+// })()

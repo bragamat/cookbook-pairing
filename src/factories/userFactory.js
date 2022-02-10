@@ -14,10 +14,19 @@ export default class UserFactory {
       try {
         return await this.repo.save(this.user, postgres)
       } catch (err) {
+        // console.log(' ta caindo aqui ? => ', this.user.errors)
         throw new Error(err.message)
       }
     }
+    // console.log(' ta caindo aqui ? => ', this.user.errors)
 
     return this.user.errors
+  }
+
+  async delete(){
+    try{
+      return await this.repo.delete({id: this.user.id}, postgres)
+    } catch (eerr) {
+    }
   }
 }

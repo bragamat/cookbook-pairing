@@ -12,5 +12,9 @@ export default class Strategy {
   async read(item){
     return await this.db.read(item)
   }
+
+  async delete(item){
+    return await this.db.delete(item)
+  }
 }
 

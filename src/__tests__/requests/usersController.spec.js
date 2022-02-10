@@ -14,8 +14,19 @@ describe('/users', () => {
 
   beforeEach(async () => await UserRepo.deleteAll(strategy))
 
-  describe('#DELETE', () => {
-    it.only('removes user from database', async () => {
+  describe('#GET/:id', () => {
+    it('returns a user from database by id', async () => {
+      const user = await UserFixture.create()
+      const result = await req(app)
+        .get(`/users/${user.id}`)
+
+      expect(result.status).toBe(200)
+      expect(result.body).toEqual(user)
+    })
+  })
+
+  describe('#DELETE/:id', () => {
+    it('removes user from database', async () => {
       const user = await UserFixture.create()
       const result = await req(app)
         .delete(`/users/${user.id}`)

@@ -1,15 +1,21 @@
+import { postgres } from '../repositories/base.js'
+
 export default class UserRepo {
-  constructor(strategy) {
+  constructor(strategy = postgres, user) {
     this.strategy = strategy
     this.table = 'users'
+    this.user = user
   }
 
   async create(user) {
     return await this.strategy.create({ user, table: this.table })
   }
 
-  async delete() {
-    return await this.strategy.delete({ table: this.table })
+  async delete(query) {
+    try{
+      return await this.strategy.delete({ table: this.table, query })
+    } catch(err){
+    }
   }
 
   async select(query = "*"){
@@ -21,6 +27,16 @@ export default class UserRepo {
 
     try {
       return await repo.create(user)
+    } catch (err) {
+      throw new Error(JSON.stringify(err))
+    }
+  }
+
+  static async delete(query, strategy) {
+    const repo = new UserRepo(strategy)
+
+    try {
+      return await repo.delete(query)
     } catch (err) {
       throw new Error(JSON.stringify(err))
     }
