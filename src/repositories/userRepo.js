@@ -8,58 +8,29 @@ export default class UserRepo {
     this.user = user
   }
 
-  async delete(query) {
-    try{
-      return await this.strategy.delete({ table: this.table, query })
-    } catch(err){
-      console.log('err => ', err)
-      throw new Error(err)
-    }
-  }
+  static async all(){
+    const repo = new UserRepo()
 
-  async select(query = "*"){
-    return await this.strategy.read({ table: this.table, query })
+    return await repo.strategy.read({table: repo.table})
   }
 
   static async save(user){
     const repo = new UserRepo()
+    const result = await repo.strategy.create({ user, table: repo.table })
 
-    try {
-      const result = await repo.strategy.create({ user, table: repo.table })
-
-      return new UserModel({ ...user, ...result })
-    } catch (err) {
-      throw new Error(JSON.stringify(err))
-    }
+    return new UserModel({ ...user, ...result })
   }
 
   static async delete(user) {
     const repo = new UserRepo()
 
-    try {
-      return await repo.delete(user)
-    } catch (err) {
-      throw new Error(JSON.stringify(err))
-    }
+    return await repo.strategy.delete({ table: repo.table, query: user })
   }
 
   static async deleteAll() {
     const repo = new UserRepo()
 
-    try {
-      return await repo.delete()
-    } catch (err) {
-      throw new Error(JSON.stringify(err))
-    }
+    return await repo.strategy.delete({ table: repo.table, query: null })
   }
 
-  static async all(){
-    const repo = new UserRepo()
-
-    try {
-      return await repo.select()
-    } catch (err) {
-      throw new Error(JSON.stringify(err))
-    }
-  }
 }
