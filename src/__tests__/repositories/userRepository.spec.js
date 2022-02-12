@@ -1,16 +1,32 @@
-import UserFactory from '../../factories/userFactory.js'
+import { jest } from "@jest/globals"
+import UserFixture from '../support/fixtures/validUser.js'
 import UserModel from '../../models/user.js';
 import UserRepo from '../../repositories/userRepo.js'
-import PGStrategy from '../../strategies/postgres.js'
 
-let strategy;
+import { postgres } from '../../repositories/base.js'
+
 describe('UserRepository', () => {
   beforeAll(async () => {
-    strategy = new PGStrategy()
-    await UserRepo.deleteAll(strategy)
+    await UserRepo.deleteAll()
+  })
+
+  it('triggers db delete', async () => {
+    jest.spyOn(postgres, postgres.delete.name)
+
+    const user = await UserFixture.create()
+    await UserRepo.delete(user)
+
+    expect(await UserRepo.all()).toHaveLength(0)
+    expect(postgres.delete).toHaveBeenCalledTimes(1)
+    expect(postgres.delete).toHaveBeenCalledWith({
+      table: 'users',
+      query: user
+    })
   })
 
   it('triggers db insert', async () => {
+    await UserFixture.create()
+
     const params = {
       name: 'Mateus Braga',
       age: 26,
@@ -18,13 +34,11 @@ describe('UserRepository', () => {
     }
 
     const user = new UserModel(params)
+    const userRepo = await UserRepo.save(user)
 
-    const userRepo = new UserRepo(user)
+    expect(userRepo).toMatchObject(params)
+    expect(userRepo).toBeInstanceOf(UserModel)
 
-    const userFactory = await UserFactory.save(params)
-
-    expect(userFactory).toMatchObject(params)
-    expect(userFactory).toBeInstanceOf(UserModel)
-    expect(await UserRepo.all(strategy)).toHaveLength(1)
+    expect(await UserRepo.all()).toHaveLength(2)
   })
 })
