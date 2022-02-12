@@ -3,7 +3,7 @@ import req from 'supertest'
 
 import UserRepo from '../../repositories/userRepo.js'
 import PGStrategy from '../../strategies/postgres.js'
- 
+
 import UserFixture from '../support/fixtures/validUser.js'
 
 let strategy;
@@ -17,6 +17,7 @@ describe('/users', () => {
   describe('#GET/:id', () => {
     it('returns a user from database by id', async () => {
       const user = await UserFixture.create()
+      console.log({ user })
       const result = await req(app)
         .get(`/users/${user.id}`)
 

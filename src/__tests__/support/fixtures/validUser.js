@@ -1,4 +1,5 @@
 import UserFactory from '../../../factories/userFactory.js'
+
 const validUserParams = {
   name: 'Mateus Braga',
   email: 'valid@email.com',
@@ -11,10 +12,9 @@ export default class UserFixture {
   }
   static async create(){
     try{
-      const user = await new UserFactory(validUserParams).save()
-      return  user
+      return await UserFactory.save(validUserParams)
     } catch(err) {
-      console.log(' CAIU NO ERRO NA FACTORY => ', err)
+      console.log(err)
     }
   }
 }

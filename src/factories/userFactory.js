@@ -3,22 +3,32 @@ import UserRepo from '../repositories/userRepo.js'
 import { postgres } from '../repositories/base.js'
 
 export default class UserFactory {
-  constructor(params, repo = UserRepo){
-    this.user = new UserModel({...params})
+  constructor(repo = UserRepo){
     this.repo = repo
+  }
+
+  static async save(params){
+    const user = new UserModel(params)
+    const fact = new UserFactory()
+
+    if(user.isValid()) {
+      try {
+        return await fact.repo.save(user, postgres)
+      } catch(err) {
+        throw new Error(err.message)
+      }
+    }
+    return user.errors
   }
 
   async save(){
     if(this.user.isValid()) {
-
       try {
         return await this.repo.save(this.user, postgres)
       } catch (err) {
-        // console.log(' ta caindo aqui ? => ', this.user.errors)
         throw new Error(err.message)
       }
     }
-    // console.log(' ta caindo aqui ? => ', this.user.errors)
 
     return this.user.errors
   }

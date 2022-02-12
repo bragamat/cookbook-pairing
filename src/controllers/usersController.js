@@ -18,10 +18,9 @@ UsersController.get('/:id', async (req, res) => {
 })
 
 UsersController.post('/', async (req, res) => {
-  const userFactory = new UserFactory(req.body.user, UserRepo)
-
   try {
-    return res.json(await userFactory.save())
+    const userFactory = await UserFactory.save(req.body.user)
+    return res.json(userFactory)
   } catch(err) {
     return res.status(400).json(JSON.parse(err.message))
   }

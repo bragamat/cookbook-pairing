@@ -15,6 +15,8 @@ export default class UserRepo {
     try{
       return await this.strategy.delete({ table: this.table, query })
     } catch(err){
+      console.log('err => ', err)
+      throw new Error(err)
     }
   }
 

@@ -4,18 +4,22 @@ import UserRepo from '../../repositories/userRepo.js'
 import PGStrategy from '../../strategies/postgres.js'
 
 let strategy;
-describe('UserFactory', () => {
+describe('UserRepository', () => {
   beforeAll(async () => {
     strategy = new PGStrategy()
     await UserRepo.deleteAll(strategy)
   })
 
-  it('saves user to database', async () => {
+  it('triggers db insert', async () => {
     const params = {
       name: 'Mateus Braga',
       age: 26,
       email: 'mateus@braga.com'
     }
+
+    const user = new UserModel(params)
+
+    const userRepo = new UserRepo(user)
 
     const userFactory = await UserFactory.save(params)
 
